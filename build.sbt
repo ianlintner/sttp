@@ -213,6 +213,7 @@ lazy val allAggregates = projectsWithOptionalNative ++
   openTelemetryMetricsBackend.projectRefs ++
   openTelemetryTracingZio1Backend.projectRefs ++
   openTelemetryTracingZioBackend.projectRefs ++
+  zioMetricsBackend.projectRefs ++
   finagleBackend.projectRefs ++
   armeriaBackend.projectRefs ++
   armeriaScalazBackend.projectRefs ++
@@ -951,6 +952,22 @@ lazy val openTelemetryTracingZioBackend = (projectMatrix in file("observability/
   .dependsOn(zio % compileAndTest)
   .dependsOn(core)
 
+lazy val zioMetricsBackend = (projectMatrix in file("observability/zio-metrics-backend"))
+  .settings(commonJvmSettings)
+  .settings(
+    name := "zio-metrics-backend",
+    testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework"),
+    libraryDependencies ++= Seq(
+      "dev.zio" %%% "zio" % zio2Version,
+      "com.softwaremill.sttp.shared" %%% "zio" % sttpSharedVersion,
+      "dev.zio" %% "zio-test" % zio2Version % Test,
+      "dev.zio" %% "zio-test-sbt" % zio2Version % Test
+    )
+  )
+  .jvmPlatform(scalaVersions = List(scala2_12, scala2_13) ++ scala3)
+  .dependsOn(zio % compileAndTest)
+  .dependsOn(core)
+
 lazy val scribeBackend = (projectMatrix in file("logging/scribe"))
   .settings(commonJvmSettings)
   .settings(
@@ -1082,6 +1099,7 @@ lazy val docs: ProjectMatrix = (projectMatrix in file("generated-docs")) // impo
     prometheusBackend,
     openTelemetryMetricsBackend,
     openTelemetryTracingZioBackend,
+    zioMetricsBackend,
     slf4jBackend
   )
   .jvmPlatform(scalaVersions = List(scala2_13))
