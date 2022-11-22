@@ -42,7 +42,7 @@ object ZioMetricsBackendTest extends ZIOSpecDefault {
           MetricLabel("uri", "http://stub/echo"),
           MetricLabel("code", "200")
         )).value
-      } yield assertTrue(state.count == 2)
+      } yield assertTrue(state.count == 2D)
     },
     test("set request/response content length summary") {
       for {
@@ -55,7 +55,7 @@ object ZioMetricsBackendTest extends ZIOSpecDefault {
           MetricLabel("method", "POST"),
           MetricLabel("uri", "http://stub/body")
         )).value
-      } yield assertTrue(state.max == 9) && assertTrue(state2.max == 4)
+      } yield assertTrue(state.max == 9D) && assertTrue(state2.max == 4D)
     },
     test("set requests error count") {
       for {
@@ -64,7 +64,7 @@ object ZioMetricsBackendTest extends ZIOSpecDefault {
           MetricLabel("method", "POST"),
           MetricLabel("uri", "http://stub/error")
         )).value
-      } yield assertTrue(state.count == 1)
+      } yield assertTrue(state.count == 1D)
     },
     test("set requests failed 404 count") {
       for {
@@ -74,7 +74,7 @@ object ZioMetricsBackendTest extends ZIOSpecDefault {
           MetricLabel("uri", "http://stub/404"),
           MetricLabel("code", "404")
         )).value
-      } yield assertTrue(state.count == 1)
+      } yield assertTrue(state.count == 1D)
     },
     test("set requests interrupt count") {
       for {
@@ -84,7 +84,7 @@ object ZioMetricsBackendTest extends ZIOSpecDefault {
           MetricLabel("method", "POST"),
           MetricLabel("uri", "http://stub/wait")
         )).value
-      } yield assertTrue(state.count == 1)
+      } yield assertTrue(state.count == 1D)
     } @@ withLiveClock,
     test("set requests latency") {
       for {
@@ -94,8 +94,8 @@ object ZioMetricsBackendTest extends ZIOSpecDefault {
           MetricLabel("method", "POST"),
           MetricLabel("uri", "http://stub/wait")
         )).value
-      } yield assertTrue(state.count == 1) &&
-        assertTrue(state.buckets.exists(x => x._1 == .01 && x._2 == 1))
+      } yield assertTrue(state.count == 1D) &&
+        assertTrue(state.buckets.exists(x => x._1 == .01D && x._2 == 1L))
     } @@ withLiveClock,
     test("Requests in progress count") {
       for {
@@ -111,8 +111,8 @@ object ZioMetricsBackendTest extends ZIOSpecDefault {
           MetricLabel("method", "POST"),
           MetricLabel("uri", "http://stub/long")
         )).value
-      } yield assertTrue(state.count == 2) &&
-        assertTrue(state2.count == 0)
+      } yield assertTrue(state.count == 2D) &&
+        assertTrue(state2.count == 0D)
     } @@ withLiveClock
   )
 }
