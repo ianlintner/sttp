@@ -94,7 +94,7 @@ object ZioMetricsBackendTest extends ZIOSpecDefault {
           MetricLabel("method", "POST"),
           MetricLabel("uri", "http://stub/wait")
         )).value
-      } yield assertTrue(state.count == 1D) &&
+      } yield assertTrue(state.count == 1L) &&
         assertTrue(state.buckets.exists(x => x._1 == .01D && x._2 == 1L))
     } @@ withLiveClock,
     test("Requests in progress count") {
