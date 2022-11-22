@@ -100,18 +100,17 @@ object ZioMetricsBackendTest extends ZIOSpecDefault {
     test("Requests in progress count") {
       for {
         _ <- basicRequest.post(uri"http://stub/long").send(backend).fork
-        _ <- basicRequest.post(uri"http://stub/long").send(backend).fork
-        _ = Thread.sleep(70)
+        _ <- ZIO.sleep(5.milliseconds)
         state <- backend.requestInProgress.tagged(Set(
           MetricLabel("method", "POST"),
           MetricLabel("uri", "http://stub/long")
         )).value
-        _ = Thread.sleep(150)
+        _ <- ZIO.sleep(100.milliseconds)
         state2 <- backend.requestInProgress.tagged(Set(
           MetricLabel("method", "POST"),
           MetricLabel("uri", "http://stub/long")
         )).value
-      } yield assertTrue(state.count == 2D) &&
+      } yield assertTrue(state.count == 1D) &&
         assertTrue(state2.count == 0D)
     } @@ withLiveClock
   )
