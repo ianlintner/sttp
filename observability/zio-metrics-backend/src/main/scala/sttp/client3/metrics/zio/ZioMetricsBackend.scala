@@ -22,7 +22,7 @@ object ZioMetricsBackend {
   /** Format the uri without a querystring as query strings are variable and cause metric tag-explosion. */
   object UrlWithOutQuerystringTransformer extends RequestMetricLabelTransformer {
     override def transform[T, R](request: Request[T, R]): Seq[MetricLabel] =
-      Seq(MetricLabel("uri", request.uri.copy(querySegments = Seq[QuerySegment]()).toString()))
+      Seq(MetricLabel("uri", request.uri.copy(querySegments = Seq.empty[QuerySegment]).toString()))
   }
 
   val DefaultNamespace: String = "sttp"
@@ -59,7 +59,7 @@ class ZioMetricsBackend[+P](delegate: SttpBackend[Task, P],
     val requestLabels: Set[MetricLabel] = (
       Seq(MetricLabel("method", request.method.method)) ++
         requestMetricLabelTransformer.flatMap(_.transform(request)) ++
-        request.tags.foldLeft(Seq[MetricLabel]())((acc, t) => t._2 match {
+        request.tags.foldLeft(Seq.empty[MetricLabel])((acc, t) => t._2 match {
           case metricLabel: MetricLabel => acc ++ Seq(metricLabel)
           case _ => acc
         })
