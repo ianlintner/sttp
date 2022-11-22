@@ -17,7 +17,7 @@ object ZioMetricsBackendTest extends ZIOSpecDefault {
     case r if r.uri.toString.contains("echo") =>
       Response.ok("")
     case r if r.uri.toString.contains("body") =>
-      Response("1234", StatusCode(200), "OK", Seq(Header("Content-Length", "4")), Nil, ExampleGet)
+      Response("1234", StatusCode(200), "OK", scala.collection.immutable.Seq[Header](Header("Content-Length", "4")), Nil, ExampleGet)
     case r if r.uri.toString.contains("long") =>
       Thread.sleep(75)
       Response.ok("")
@@ -30,7 +30,7 @@ object ZioMetricsBackendTest extends ZIOSpecDefault {
       Response("error", StatusCode.NotFound)
   }
 
-  private def backend: ZioMetricsBackend[Any] = new ZioMetricsBackend(stubBackend)
+  private val backend: ZioMetricsBackend[Any] = new ZioMetricsBackend(stubBackend)
 
   override def spec: Spec[TestEnvironment, Any] = suite("ZioMetricsBackend")(
     test("requests success count") {
