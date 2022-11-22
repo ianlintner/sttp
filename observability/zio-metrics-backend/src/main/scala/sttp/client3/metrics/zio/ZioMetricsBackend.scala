@@ -10,6 +10,7 @@ import zio.metrics.MetricKeyType.Histogram.Boundaries
 import zio.metrics._
 
 import java.time.temporal.ChronoUnit
+import scala.collection.immutable
 
 object ZioMetricsBackend {
   type MetricsTimer = Metric[MetricKeyType.Histogram, Duration, MetricState.Histogram]
@@ -22,7 +23,7 @@ object ZioMetricsBackend {
   /** Format the uri without a querystring as query strings are variable and cause metric tag-explosion. */
   object UrlWithOutQuerystringTransformer extends RequestMetricLabelTransformer {
     override def transform[T, R](request: Request[T, R]): Seq[MetricLabel] =
-      Seq(MetricLabel("uri", request.uri.copy(querySegments = Seq.empty[QuerySegment]).toString()))
+      Seq(MetricLabel("uri", request.uri.copy(querySegments = immutable.Seq.empty[QuerySegment]).toString()))
   }
 
   val DefaultNamespace: String = "sttp"
