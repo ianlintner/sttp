@@ -959,7 +959,6 @@ lazy val zioMetricsBackend = (projectMatrix in file("observability/zio-metrics-b
     testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework"),
     libraryDependencies ++= Seq(
       "dev.zio" %%% "zio" % zio2Version,
-      "com.softwaremill.sttp.shared" %%% "zio" % sttpSharedVersion,
       "dev.zio" %% "zio-test" % zio2Version % Test,
       "dev.zio" %% "zio-test-sbt" % zio2Version % Test
     )

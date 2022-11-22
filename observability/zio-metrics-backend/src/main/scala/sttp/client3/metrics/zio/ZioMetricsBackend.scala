@@ -3,6 +3,7 @@ package sttp.client3.metrics.zio
 import sttp.capabilities.Effect
 import sttp.client3._
 import sttp.client3.metrics.zio.ZioMetricsBackend._
+import sttp.model.Uri.QuerySegment
 import zio._
 import zio.metrics.Metric._
 import zio.metrics.MetricKeyType.Histogram.Boundaries
@@ -21,7 +22,7 @@ object ZioMetricsBackend {
   /** Format the uri without a querystring as query strings are variable and cause metric tag-explosion. */
   object UrlWithOutQuerystringTransformer extends RequestMetricLabelTransformer {
     override def transform[T, R](request: Request[T, R]): Seq[MetricLabel] =
-      Seq(MetricLabel("uri", request.uri.copy(querySegments = Seq.empty).toString()))
+      Seq(MetricLabel("uri", request.uri.copy(querySegments = Seq[QuerySegment]()).toString()))
   }
 
   val DefaultNamespace: String = "sttp"
