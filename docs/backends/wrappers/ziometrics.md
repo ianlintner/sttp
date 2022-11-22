@@ -21,7 +21,7 @@ The ZIO Metrics backend wraps any other backend, for example using ZLayer constr
   import sttp.client3.metrics.zio._
   import zio._
   
-  val metricsWrappedClientLayer: ZLayer[Any, Throwable, Unit] = zio.ZLayer.fromZIO(
+  val metricsWrappedClientLayer: ZLayer[Any, Throwable, Unit] = ZLayer.fromZIO(
     HttpClientZioBackend.apply()
     .map(client => (ZioMetricsBackend(client)))
   )
