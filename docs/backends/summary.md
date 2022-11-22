@@ -71,6 +71,7 @@ There are also backends which wrap other backends to provide additional function
 * `OpenTelemetryTracingBackend`, for OpenTelemetry-compatible distributed tracing. See the [dedicated section](wrappers/opentelemetry.md).
 * `OpenTelemetryMetricsBackend`, for OpenTelemetry-compatible metrics. See the [dedicated section](wrappers/opentelemetry.md).
 * `PrometheusBackend`, for gathering Prometheus-format metrics. See the [dedicated section](wrappers/prometheus.md).
+* `ZioMetricsBackend`, for gathering zio core metrics. See the [dedicated section](wrappers/ziometrics.md).
 * extendable logging backends (with an slf4j implementation) backends. See the [dedicated section](wrappers/logging.md).
 * `ResolveRelativeUrisBackend` to resolve relative URIs given a base URI, or an arbitrary effectful function
 * `ListenerBackend` to listen for backend lifecycle events. See the [dedicated section](wrappers/custom.md).
