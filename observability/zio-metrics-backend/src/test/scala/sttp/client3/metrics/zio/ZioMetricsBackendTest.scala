@@ -6,7 +6,7 @@ import sttp.client3.testing.SttpBackendStub
 import sttp.client3.{Response, UriContext, basicRequest}
 import sttp.model.{Header, StatusCode}
 import zio.metrics.MetricLabel
-import zio.test.TestAspect.withLiveClock
+import zio.test.TestAspect.{flaky, withLiveClock}
 import zio.test._
 import zio.{ZIO, durationInt}
 
@@ -100,7 +100,7 @@ object ZioMetricsBackendTest extends ZIOSpecDefault {
     test("Requests in progress count") {
       for {
         _ <- basicRequest.post(uri"http://stub/long").send(backend).fork
-        _ <- ZIO.sleep(5.milliseconds)
+        _ <- ZIO.sleep(60.milliseconds)
         state <- backend.requestInProgress.tagged(Set(
           MetricLabel("method", "POST"),
           MetricLabel("uri", "http://stub/long")
@@ -112,6 +112,6 @@ object ZioMetricsBackendTest extends ZIOSpecDefault {
         )).value
       } yield assertTrue(state.count == 1D) &&
         assertTrue(state2.count == 0D)
-    } @@ withLiveClock
+    } @@ withLiveClock @@ flaky
   )
 }
