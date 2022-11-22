@@ -19,9 +19,9 @@ The ZIO Metrics backend wraps any other backend, for example using ZLayer constr
 ```scala mdoc:compile-only
   import sttp.client3.httpclient.zio.HttpClientZioBackend
   import sttp.client3.metrics.zio._
-  import sttp.client3.httpclient.zio.HttpClientZioBackend
+  import zio._
   
-  val metricsWrappedClientLayer: ZLayer[Any, Throwable, Unit] = ZLayer.fromZIO(
+  val metricsWrappedClientLayer: ZLayer[Any, Throwable, Unit] = zio.ZLayer.fromZIO(
     HttpClientZioBackend.apply()
     .map(client => (ZioMetricsBackend(client)))
   )
