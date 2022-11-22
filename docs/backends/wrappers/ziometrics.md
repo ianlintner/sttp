@@ -14,11 +14,17 @@ import sttp.client3.metrics.zio._
 
 This backend depends on [ZIO Core Metrics](https://zio.dev/guides/tutorials/monitor-a-zio-application-using-zio-built-in-metric-system#adding-dependencies-to-the-project). Keep in mind this backend registers histograms and gathers request times, but you have to expose those metrics to [Prometheus](https://prometheus.io/) using a connector e.g. using [zio-metrics-connector](https://zio.dev/guides/tutorials/monitor-a-zio-application-using-zio-built-in-metric-system#adding-dependencies-to-the-project).
 
-The Prometheus backend wraps any other backend, for example:
+The ZIO Metrics backend wraps any other backend, for example using ZLayer construction:
 
 ```scala mdoc:compile-only
-import sttp.client3.metrics.zio._
-val backend = new ZioMetricsBackend(stubBackend)
+  import sttp.client3.httpclient.zio.HttpClientZioBackend
+  import sttp.client3.metrics.zio._
+  import sttp.client3.httpclient.zio.HttpClientZioBackend
+  
+  val metricsWrappedClientLayer: ZLayer[Any, Throwable, Unit] = ZLayer.fromZIO(
+    HttpClientZioBackend.apply()
+    .map(client => (ZioMetricsBackend(client)))
+  )
 ```
 
 Metrics Provided

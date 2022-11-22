@@ -39,6 +39,14 @@ object ZioMetricsBackend {
       duration.toNanos.toDouble / NanosSecondsDivisor
     }
 
+  def apply[P](delegate: SttpBackend[Task, P],
+            namespace: String = DefaultNamespace,
+            defaultTags: Set[MetricLabel] = Set.empty,
+            requestMetricLabelTransformer: Seq[RequestMetricLabelTransformer] = Seq(UrlWithOutQuerystringTransformer)
+           ): Unit = {
+    new ZioMetricsBackend(delegate, namespace, defaultTags, requestMetricLabelTransformer)
+  }
+
 }
 
 class ZioMetricsBackend[+P](delegate: SttpBackend[Task, P],
